@@ -17,16 +17,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.shmryandex.R
+import com.example.shmryandex.domain.entity.Category
+import com.example.shmryandex.domain.entity.Income
 import com.example.shmryandex.presentation.toCurrencyString
 import com.example.shmryandex.ui.theme.DividerGrey
 import com.example.shmryandex.ui.theme.Grey
 import com.example.shmryandex.ui.theme.SecondaryGreen
+import com.example.shmryandex.ui.theme.TextGrey
 
 @Composable
 fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel()) {
@@ -41,6 +46,15 @@ fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel()) {
                 .background(SecondaryGreen)
                 .fillMaxWidth()
                 .height(56.dp)
+                .drawBehind {
+                    val strokeWidth = 0.7.dp.toPx()
+                    drawLine(
+                        color = DividerGrey,
+                        start = Offset(0f, size.height - strokeWidth / 2),
+                        end = Offset(size.width, size.height - strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Text(
@@ -54,10 +68,9 @@ fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel()) {
         }
 
         LazyColumn {
-            items(uiState.value.incomes) { expense ->
-                ExpenseCard(
-                    expense.category,
-                    expense.amount
+            items(uiState.value.incomes) { income ->
+                IncomeCard(
+                    income
                 )
             }
         }
@@ -65,24 +78,46 @@ fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun ExpenseCard(category: String, amount: Int) {
+private fun IncomeCard(income: Income) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
-            .border(0.7.dp, DividerGrey, RectangleShape)
+            .drawBehind {
+                val strokeWidth = 0.7.dp.toPx()
+                drawLine(
+                    color = DividerGrey,
+                    start = Offset(0f, size.height - strokeWidth / 2),
+                    end = Offset(size.width, size.height - strokeWidth / 2),
+                    strokeWidth = strokeWidth
+                )
+            }
             .padding(horizontal = 16.dp, vertical = 8.dp)
 
     ) {
 
-        Text(
-            modifier = Modifier
-                .weight(1f),
-            text = category
-        )
-        Text(text = amount.toCurrencyString())
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = income.category.name
+            )
+            if (income.comment != "") {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = income.comment,
+                    fontSize = 14.sp,
+                    color = TextGrey
+                )
+            }
+
+        }
+        Text(text = income.amount.toCurrencyString())
         Image(
             painter = painterResource(R.drawable.ic_more),
             contentDescription = null

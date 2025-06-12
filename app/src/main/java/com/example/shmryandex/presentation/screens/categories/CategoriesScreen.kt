@@ -19,7 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,6 +57,15 @@ private fun Search() {
             .fillMaxWidth()
             .height(56.dp)
             .background(Grey)
+            .drawBehind {
+                val strokeWidth = 0.7.dp.toPx()
+                drawLine(
+                    color = DividerGrey,
+                    start = Offset(0f, size.height - strokeWidth / 2),
+                    end = Offset(size.width, size.height - strokeWidth / 2),
+                    strokeWidth = strokeWidth
+                )
+            }
             .padding(vertical = 8.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -79,15 +89,26 @@ private fun CategoryCard(emoji: String, name: String) {
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
-            .border(0.7.dp, DividerGrey, RectangleShape)
+            .drawBehind {
+                val strokeWidth = 0.7.dp.toPx()
+                drawLine(
+                    color = DividerGrey,
+                    start = Offset(0f, size.height - strokeWidth / 2),
+                    end = Offset(size.width, size.height - strokeWidth / 2),
+                    strokeWidth = strokeWidth
+                )
+            }
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(
-            modifier = Modifier.background(SecondaryGreen, CircleShape)
+            modifier = Modifier
+                .size(24.dp)
+                .background(SecondaryGreen, CircleShape)
         ) {
             Text(
+                modifier = Modifier.align(Alignment.Center),
                 text = emoji
             )
         }

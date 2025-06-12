@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +30,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,18 +42,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.shmryandex.R
+import com.example.shmryandex.domain.entity.Category
+import com.example.shmryandex.domain.entity.Expense
 import com.example.shmryandex.presentation.navigation.AppNavGraph
 import com.example.shmryandex.presentation.navigation.Screen
 import com.example.shmryandex.presentation.screens.NavigationItem
 import com.example.shmryandex.presentation.screens.account.AccountScreen
 import com.example.shmryandex.presentation.screens.categories.CategoriesScreen
 import com.example.shmryandex.presentation.screens.incomes.IncomesScreen
+import com.example.shmryandex.presentation.screens.options.OptionsScreen
 import com.example.shmryandex.presentation.toCurrencyString
 import com.example.shmryandex.ui.theme.DividerGrey
 import com.example.shmryandex.ui.theme.Grey
 import com.example.shmryandex.ui.theme.PrimaryGreen
 import com.example.shmryandex.ui.theme.SHMRYandexTheme
 import com.example.shmryandex.ui.theme.SecondaryGreen
+import com.example.shmryandex.ui.theme.TextGrey
 
 @Composable
 fun MainScreen() {
@@ -91,7 +98,7 @@ fun MainScreen() {
                             navHostController.navigate(item.screen.route)
                         },
                         icon = {
-                            Image(
+                            Icon(
                                 painter = painterResource(item.iconId),
                                 contentDescription = null
                             )
@@ -128,7 +135,7 @@ fun MainScreen() {
                 incomesScreenContent = { IncomesScreen() },
                 accountScreenContent = { AccountScreen() },
                 categoriesScreenContent = { CategoriesScreen() },
-                optionsScreenContent = { IncomesScreen() },
+                optionsScreenContent = { OptionsScreen() },
             )
         }
     }
@@ -147,6 +154,15 @@ fun ExpensesScreen(viewModel: ExpensesViewModel = hiltViewModel()) {
                 .background(SecondaryGreen)
                 .fillMaxWidth()
                 .height(56.dp)
+                .drawBehind {
+                    val strokeWidth = 0.7.dp.toPx()
+                    drawLine(
+                        color = DividerGrey,
+                        start = Offset(0f, size.height - strokeWidth / 2),
+                        end = Offset(size.width, size.height - strokeWidth / 2),
+                        strokeWidth = strokeWidth
+                    )
+                }
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Text(
@@ -162,9 +178,7 @@ fun ExpensesScreen(viewModel: ExpensesViewModel = hiltViewModel()) {
         LazyColumn {
             items(uiState.value.expenses) { expense ->
                 ExpenseCard(
-                    R.drawable.ic_expense_type,
-                    expense.category,
-                    expense.amount
+                    expense
                 )
             }
         }
@@ -172,28 +186,57 @@ fun ExpensesScreen(viewModel: ExpensesViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun ExpenseCard(lead: Int, category: String, amount: Int) {
+private fun ExpenseCard(expense: Expense) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
-            .border(0.7.dp, DividerGrey, RectangleShape)
+            .drawBehind {
+                val strokeWidth = 0.7.dp.toPx()
+                drawLine(
+                    color = DividerGrey,
+                    start = Offset(0f, size.height - strokeWidth / 2),
+                    end = Offset(size.width, size.height - strokeWidth / 2),
+                    strokeWidth = strokeWidth
+                )
+            }
             .padding(horizontal = 16.dp, vertical = 8.dp)
 
     ) {
-        Image(
-            painter = painterResource(lead),
-            contentDescription = null
-        )
-
-        Text(
+        Box(
             modifier = Modifier
-                .weight(1f),
-            text = category
-        )
-        Text(text = amount.toCurrencyString())
+                .size(24.dp)
+                .background(SecondaryGreen, CircleShape)
+        ) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = expense.category.emoji
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = expense.category.name
+            )
+            if (expense.comment != "") {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = expense.comment,
+                    fontSize = 14.sp,
+                    color = TextGrey
+                )
+            }
+
+        }
+
+        Text(text = expense.amount.toCurrencyString())
         Image(
             painter = painterResource(R.drawable.ic_more),
             contentDescription = null
@@ -201,32 +244,6 @@ private fun ExpenseCard(lead: Int, category: String, amount: Int) {
     }
 }
 
-
-@Composable
-@Preview
-fun Preview1() {
-    SHMRYandexTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center,
-                text = "Расходы сегодня"
-            )
-
-            Icon(
-                painter = painterResource(R.drawable.ic_history),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.CenterEnd)
-            )
-        }
-    }
-}
 
 @Composable
 private fun CustomTopAppBar(title: String, icon: Int?) {

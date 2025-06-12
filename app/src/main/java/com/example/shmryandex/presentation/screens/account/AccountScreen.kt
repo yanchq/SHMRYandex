@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.shmryandex.R
 import com.example.shmryandex.presentation.toCurrencyString
+import com.example.shmryandex.ui.theme.DividerGrey
 import com.example.shmryandex.ui.theme.SecondaryGreen
 
 @Composable
@@ -45,6 +48,15 @@ private fun BalanceCard(balance: Int) {
             .background(SecondaryGreen)
             .fillMaxWidth()
             .height(56.dp)
+            .drawBehind {
+                val strokeWidth = 0.7.dp.toPx()
+                drawLine(
+                    color = DividerGrey,
+                    start = Offset(0f, size.height - strokeWidth / 2),
+                    end = Offset(size.width, size.height - strokeWidth / 2),
+                    strokeWidth = strokeWidth
+                )
+            }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
 
