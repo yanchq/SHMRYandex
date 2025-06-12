@@ -12,25 +12,39 @@ class FinanceRepositoryImpl @Inject constructor(): FinanceRepository {
     override fun getExpensesList(): List<Expense> {
         return listOf(
             Expense(
-                1,
-                "Kaif",
-                100000,
-                "25.05.2025",
-                ""
+                id = 1,
+                Category(
+                    id = 1,
+                    name = "Шоппинг",
+                    emoji = "\uD83D\uDCB0",
+                    isIncome = true
+                ),
+                amount = 100000,
+                createdAt = "25.05.2025",
             ),
             Expense(
-                1,
-                "Kaif",
+                id = 1,
+                Category(
+                    id = 1,
+                    name = "Шоппинг",
+                    emoji = "\uD83D\uDCB0",
+                    isIncome = true
+                ),
                 100000,
-                "25.05.2025",
-                ""
+
+                comment = "Курточка",
+                createdAt = "25.05.2025"
             ),
             Expense(
-                1,
-                "Kaif",
-                100000,
-                "25.05.2025",
-                ""
+                id = 1,
+                Category(
+                    id = 1,
+                    name = "Шоппинг",
+                    emoji = "\uD83D\uDCB0",
+                    isIncome = true
+                ),
+                amount =  100000,
+                createdAt =  "25.05.2025",
             )
         )
     }
@@ -39,17 +53,32 @@ class FinanceRepositoryImpl @Inject constructor(): FinanceRepository {
         return listOf(
             Income(
                 1,
-                "Zarplata",
+                Category(
+                    id = 1,
+                    name = "Зарплата",
+                    emoji = "\uD83D\uDCB0",
+                    isIncome = true
+                ),
                 15000
             ),
             Income(
                 1,
-                "Zarplata",
+                Category(
+                    id = 1,
+                    name = "Зарплата",
+                    emoji = "\uD83D\uDCB0",
+                    isIncome = true
+                ),
                 15000
             ),
             Income(
                 1,
-                "Zarplata",
+                Category(
+                    id = 1,
+                    name = "Зарплата",
+                    emoji = "\uD83D\uDCB0",
+                    isIncome = true
+                ),
                 15000
             )
         )
@@ -68,7 +97,13 @@ class FinanceRepositoryImpl @Inject constructor(): FinanceRepository {
         return listOf(
             Category(
                 id = 1,
-                name = "Zarplata",
+                name = "Зарплата",
+                emoji = "\uD83D\uDCB0",
+                isIncome = true
+            ),
+            Category(
+                id = 2,
+                name = "Шоппинг",
                 emoji = "\uD83D\uDCB0",
                 isIncome = true
             )
