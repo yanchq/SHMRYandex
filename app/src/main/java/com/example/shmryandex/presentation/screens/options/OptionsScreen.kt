@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -74,7 +75,8 @@ private fun OptionCard(name: String) {
         Text(
             modifier = Modifier
                 .weight(1f),
-            text = name
+            text = name,
+            style = MaterialTheme.typography.bodyMedium
         )
 
         Image(
@@ -109,7 +111,8 @@ fun ThemeToggle(
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "Тёмная тема"
+            text = "Тёмная тема",
+            style = MaterialTheme.typography.bodyMedium
         )
         Switch(
             checked = isDarkTheme,
