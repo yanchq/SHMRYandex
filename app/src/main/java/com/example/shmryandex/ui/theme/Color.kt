@@ -15,4 +15,5 @@ val SecondaryGreen = Color(0xFFD4FAE6)
 
 val Grey = Color(0xFFECE6F0)
 val TextGrey = Color(0xFF49454F)
+val TextBlack = Color(0xFF1D1B20)
 val DividerGrey = Color(0xFFCAC4D0)

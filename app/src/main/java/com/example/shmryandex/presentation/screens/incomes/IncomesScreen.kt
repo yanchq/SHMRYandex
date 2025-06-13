@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,11 +60,11 @@ fun IncomesScreen(viewModel: IncomesViewModel = hiltViewModel()) {
         ) {
             Text(
                 text = "Всего",
-                fontSize = 16.sp
+                style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 text = uiState.value.summary.toCurrencyString(),
-                fontSize = 16.sp
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -104,20 +105,23 @@ private fun IncomeCard(income: Income) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = income.category.name
+                text = income.category.name,
+                style = MaterialTheme.typography.bodyMedium
             )
             if (income.comment != "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = income.comment,
-                    fontSize = 14.sp,
-                    color = TextGrey
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
         }
-        Text(text = income.amount.toCurrencyString())
+        Text(
+            text = income.amount.toCurrencyString(),
+            style = MaterialTheme.typography.bodyMedium
+        )
         Image(
             painter = painterResource(R.drawable.ic_more),
             contentDescription = null

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -145,7 +146,7 @@ private fun CustomTopAppBar(title: String, icon: Int?) {
                 .align(Alignment.Center),
             textAlign = TextAlign.Center,
             text = title,
-            fontSize = 22.sp
+            style = MaterialTheme.typography.titleLarge
         )
 
         icon?.let {

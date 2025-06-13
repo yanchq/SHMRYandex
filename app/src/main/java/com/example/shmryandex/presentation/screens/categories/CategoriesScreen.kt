@@ -3,6 +3,7 @@ package com.example.shmryandex.presentation.screens.categories
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,30 +15,41 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.shmryandex.R
 import com.example.shmryandex.ui.theme.DividerGrey
-import com.example.shmryandex.ui.theme.Grey
 import com.example.shmryandex.ui.theme.SecondaryGreen
-import com.example.shmryandex.ui.theme.TextGrey
 
 @Composable
 fun CategoriesScreen(viewModel: CategoriesViewModel = hiltViewModel()) {
 
     val uiState = viewModel.uiState.collectAsState()
+    var query by remember { mutableStateOf("") }
 
     Column {
-        Search()
+        Search(
+            query = query,
+            onQueryChange = { query = it }
+        )
 
         LazyColumn {
             items(uiState.value.categoriesList) { category ->
@@ -51,34 +63,57 @@ fun CategoriesScreen(viewModel: CategoriesViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun Search() {
-    Row(
+fun Search(
+    query: String,
+    onQueryChange: (String) -> Unit
+) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(Grey)
+            .background(Color(0xFFECE6F0))
             .drawBehind {
                 val strokeWidth = 0.7.dp.toPx()
                 drawLine(
-                    color = DividerGrey,
+                    color = Color(0xFFCAC4D0),
                     start = Offset(0f, size.height - strokeWidth / 2),
                     end = Offset(size.width, size.height - strokeWidth / 2),
                     strokeWidth = strokeWidth
                 )
             }
-            .padding(vertical = 8.dp, horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding( horizontal = 8.dp)
     ) {
-        Text(
-            modifier = Modifier.weight(1f),
-            text = "Найти статью",
-            fontSize = 16.sp,
-            color = TextGrey
+        TextField(
+            value = query,
+            onValueChange = onQueryChange,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text(
+                    text = "Найти статью",
+                    fontSize = 16.sp,
+                    color = Color(0xFF49454F),
+                    style  = MaterialTheme.typography.bodyLarge
+                )
+            },
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color(0xFF49454F),
+                unfocusedTextColor = Color(0xFFECE6F0),
+                focusedIndicatorColor = Color(0xFFCAC4D0),
+                unfocusedIndicatorColor = Color(0xFFCAC4D0),
+                focusedPlaceholderColor = Color(0xFFECE6F0),
+                unfocusedPlaceholderColor = Color(0xFFECE6F0),
+                focusedContainerColor = Color(0xFFECE6F0),
+                unfocusedContainerColor = Color(0xFFECE6F0),
+            ),
+            singleLine = true
         )
 
         Image(
             painter = painterResource(R.drawable.ic_search),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.align(Alignment.CenterEnd)
+                .padding(end = 10.dp)
+                .clickable{}
         )
     }
 }
@@ -115,7 +150,7 @@ private fun CategoryCard(emoji: String, name: String) {
 
         Text(
             text = name,
-            fontSize = 16.sp
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

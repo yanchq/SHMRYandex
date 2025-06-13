@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -87,11 +88,11 @@ fun ExpensesScreen(viewModel: ExpensesViewModel = hiltViewModel()) {
         ) {
             Text(
                 text = "Всего",
-                fontSize = 16.sp
+                style = MaterialTheme.typography.bodyMedium
             )
             Text(
                 text = uiState.value.summary.toCurrencyString(),
-                fontSize = 16.sp
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -142,21 +143,24 @@ private fun ExpenseCard(expense: Expense) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = expense.category.name
+                text = expense.category.name,
+                style = MaterialTheme.typography.bodyMedium
             )
             if (expense.comment != "") {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = expense.comment,
-                    fontSize = 14.sp,
-                    color = TextGrey
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
         }
 
-        Text(text = expense.amount.toCurrencyString())
+        Text(
+            text = expense.amount.toCurrencyString(),
+            style = MaterialTheme.typography.bodyMedium
+        )
         Image(
             painter = painterResource(R.drawable.ic_more),
             contentDescription = null
