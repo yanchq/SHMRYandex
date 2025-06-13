@@ -4,9 +4,9 @@ import com.example.shmryandex.R
 
 sealed class Screen(
     val route: String,
-    val title: String,
-    val topAppBarIcon: Int?,
-    val hasFloatingActionButton: Boolean
+    val title: String = "",
+    val topAppBarIcon: Int? = null,
+    val hasFloatingActionButton: Boolean = false
 ) {
 
     object Expenses: Screen(
@@ -39,6 +39,9 @@ sealed class Screen(
         null,
         false
     )
+    object Splash: Screen(
+        SPLASH_ROUTE
+    )
 
     companion object {
 
@@ -47,6 +50,7 @@ sealed class Screen(
         const val ACCOUNT_ROUTE = "Account"
         const val CATEGORIES_ROUTE = "Categories"
         const val OPTIONS_ROUTE = "Options"
+        const val SPLASH_ROUTE = "Splash"
 
         const val EXPENSES_TITLE = "Расходы сегодня"
         const val INCOMES_TITLE = "Доходы сегодня"
