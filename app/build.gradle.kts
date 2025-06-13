@@ -64,4 +64,8 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     //Navigation
     implementation(libs.navigation)
+    //Lottie
+    implementation(libs.lottie)
+    //Splash
+    implementation(libs.splash)
 }
